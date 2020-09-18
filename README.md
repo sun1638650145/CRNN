@@ -1,6 +1,8 @@
 # CRNN
 
-一个关于CRNN的AutoML，你可以使用三四行代码就可以进行验证码的识别
+一个关于CRNN的AutoML，你可以使用三四行代码就可以进行验证码的识别，
+
+阅读其他语言版本：[简体中文](https://github.com/sun1638650145/CRNN/blob/master/README.md)、[English](https://github.com/sun1638650145/CRNN/blob/master/README-en.md)
 
 ## 例子
 
@@ -14,7 +16,7 @@ pipeline = CRNNPipeline('./captcha_images_v2/')
 pipeline.run()
 ```
 
-例子中使用的数据集在点击[这里](https://github.com/AakashKumarNain/CaptchaCracker/raw/master/captcha_images_v2.zip)
+例子中使用的数据集在这里[点击](https://github.com/AakashKumarNain/CaptchaCracker/raw/master/captcha_images_v2.zip)
 
 ### custom
 
@@ -25,7 +27,7 @@ pipeline.run()
 
 ## 性能和优化
 
-1. 针对上一个版本在谷歌的capatcha上性能提高8.749倍左右
+1. 针对上一个版本在谷歌的captcha图片验证码上性能提高8.749倍左右，准确率在60%
 2. 可以使用多GPU的并行解决方案
 3. 在一个batch内标签长度不一致，不用显式的定义标签的长度
 4. 使用tf.data.Datasets代替yield读入数据集，理论上可以处理100G以上的数据
