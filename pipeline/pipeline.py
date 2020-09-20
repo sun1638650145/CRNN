@@ -4,8 +4,8 @@ import pandas as pd
 from tensorflow.keras.optimizers import Adam
 from tensorflow.python.distribute.mirrored_strategy import MirroredStrategy
 
-from tools import *
-from model import CRNN
+from ..tools import *
+from ..model import CRNN
 from .callbacks import get_callback
 
 logging.basicConfig(level=logging.INFO)
