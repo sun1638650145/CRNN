@@ -1,6 +1,7 @@
 from .pipeline import CRNNPipeline
 
 from .model import CRNN
+from .model import CRNN_Attention
 
 from .tools import character_decoder
 from .tools import character_encoder

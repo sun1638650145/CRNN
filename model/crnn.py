@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras.layers import Layer, Input, Dense
+from tensorflow.keras.layers import Layer, Input, AdditiveAttention, Concatenate, Dense
 from tensorflow.keras.models import Model
 from tensorflow.keras.backend import ctc_batch_cost, cast, shape
 
@@ -85,6 +85,64 @@ def CRNN(img_width,
 
     # Connect to full-connect-layer.
     dense_layer = Dense(units=len_characters + 1, activation='softmax', name='Output-Dense')(rnn_layer)
+    ctc_layer = CTCLayer(name='ctc_loss')(input_label, dense_layer)
+
+    if trainable is True:
+        model = Model(inputs=[input_image, input_label], outputs=ctc_layer, name='ocr_model_train')
+    else:
+        model = Model(inputs=input_image, outputs=dense_layer, name='ocr_model_inference')
+
+    return model
+
+
+def CRNN_Attention(img_width,
+                   img_height,
+                   img_channels,
+                   len_characters,
+                   trainable=True,
+                   cnn_backbone_name=get_cnn_backbone('resnet_attention'),
+                   rnn_backbone_name=None):
+    """Instantiate a CRNN architecture with attention mechanism.
+
+    Parameters:
+        img_width:
+            int, the width of image.
+        img_height:
+            int, the height of image.
+        img_channels:
+            int, the channels of image.
+        len_characters:
+            int, the length of characters.
+        trainable:
+            bool, default=True
+            If true the model will be trained, if false the model will be inferred.
+        cnn_backbone_name:
+            str, the name of convolution part of CRNN model.
+        rnn_backbone_name:
+            str, the name of recurrent part of CRNN model.
+
+    Returns:
+        A Keras model instance.
+    """
+    input_image = Input(shape=(img_width, img_height, img_channels), name='Input-Image', dtype='float32')
+    input_label = Input(shape=(None,), name='Input-Label', dtype='float32')
+
+    # CNN backbone
+    cnn_backbone = get_cnn_backbone(cnn_backbone_name)
+    cnn_layer = cnn_backbone(input_image)
+
+    # RNN backbone
+    rnn_backbone = get_rnn_backbone(rnn_backbone_name)
+    rnn_layer = rnn_backbone(cnn_layer)
+
+    # Add attention
+    attention_layer = AdditiveAttention(name='Attention')([cnn_layer, rnn_layer])
+    concatenate_layer = Concatenate(name='Concatenate')([cnn_layer, attention_layer])
+
+    # Connect to full-connect-layer.
+    dense_layer = Dense(units=len_characters + 1,
+                        activation='softmax',
+                        name='Output-Dense')(concatenate_layer)
     ctc_layer = CTCLayer(name='ctc_loss')(input_label, dense_layer)
 
     if trainable is True:

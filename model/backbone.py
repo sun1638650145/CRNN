@@ -16,6 +16,8 @@ def get_cnn_backbone(backbone_name):
     """
     if backbone_name is 'resnet':
         cnn_backbone_fn = _resnet50_cnn_backbone
+    elif backbone_name is 'resnet_attention':
+        cnn_backbone_fn = _resnet50_attention_cnn_backbone
     elif backbone_name is 'efficientnet':
         cnn_backbone_fn = _efficientnetb3_cnn_backbone
     else:
@@ -76,6 +78,28 @@ def _resnet50_cnn_backbone(input_layer):
 
     layer = Reshape(target_shape=(-1, 512), name='Reshape')(layer)
     layer = Dense(units=128, activation='relu', name='Dense1')(layer)
+    layer = Dropout(rate=0.25, name='Dropout')(layer)
+
+    return layer
+
+
+def _resnet50_attention_cnn_backbone(input_layer):
+    """ResNet50V2 convolution part of CRNN model(Only Attention use).
+
+    Parameters:
+        input_layer:
+            Keras Layer, model input.
+
+    Returns:
+        Keras Layer.
+    """
+    layer = ResNet50V2(include_top=False, weights='imagenet')(input_layer)
+
+    # The down sampling factor of ResNet50 is 28.
+    # The shape of the ResNet50 output layer is (None, img_width / 28, img_height / 28, 2048).
+
+    layer = Reshape(target_shape=(-1, 512), name='Reshape')(layer)
+    layer = Dense(units=256, activation='relu', name='Dense1')(layer)
     layer = Dropout(rate=0.25, name='Dropout')(layer)
 
     return layer
