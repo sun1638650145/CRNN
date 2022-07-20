@@ -1,0 +1,9 @@
+.DS_store
+.idea/
+# Ignore cache.
+*.pyc
+__pycache__/
+# Ignore model file.
+*.h5
+# Ignore results directory.
+results/
