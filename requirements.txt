@@ -1,0 +1,5 @@
+keras==2.9.0
+numpy==1.23.1
+pandas==1.4.3
+tensorflow-macos==2.9.2
+# tensorflow==2.9.1
