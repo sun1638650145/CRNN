@@ -31,7 +31,7 @@ def get_image_format(dataset_dir: Union[str, os.PathLike],
     """
     image = str(list(Path(dataset_dir).glob('*'))[0])  # Just look at a random one.
     image = image.lower()
-    image_format = re.findall(r'\.[^.]+', image)[0][1:]
+    image_format = re.findall(r'\.[^.]+', image)[1][1:]
 
     if image_format in ('jpg', 'jpeg', 'png'):
         return image_format
