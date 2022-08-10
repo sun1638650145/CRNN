@@ -18,5 +18,5 @@ The dataset used in the example, click [here](https://github.com/AakashKumarNain
 
 If you want higher accuracy and higher efficiency, you can use custom mode(Suitable for experts).
 
-1. You can use the `model API` and `tools API` to build your own model, (View the source-code from reference ).
+1. You can use the `model API` and `tools API` to build your own model, (you can view the source-code for reference).
 2. You are, welcome to communicate with the author.
