@@ -329,7 +329,7 @@ def visualize_dataset(image_dir: Union[str, os.PathLike],
     # Only use 16 random images for presentation.
     image_sample = os.listdir(image_dir)[:16]
     if label_path:
-        label_sample = list(pd.read_csv(label_path)['label'])
+        label_sample = list(pd.read_csv(label_path)['label'])[:16]
     else:
         label_sample = [image.split('.')[0] for image in image_sample]
 
