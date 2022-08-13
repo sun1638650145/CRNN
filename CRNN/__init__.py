@@ -1,6 +1,6 @@
 """An AutoML for CRNN, you can perform captcha recognition
  with just a few lines of code."""
-__version__ = '2.1'
+__version__ = '2.1.1'
 
 import logging
 

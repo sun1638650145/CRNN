@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 from typing import List, Tuple, Union
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -310,3 +311,34 @@ def _handling_labels(labels: List[str],
     characters = sorted(list(set(characters)))
 
     return labels, max_length, truncation_length, characters
+
+
+def visualize_dataset(image_dir: Union[str, os.PathLike],
+                      label_path: Union[str, os.PathLike] = None):
+    """Visualize dataset using matplotlib.
+
+    Args:
+        image_dir: str or os.PathLike,
+            the path of image.
+        label_path: str or os.PathLike, default=None,
+            csv file containing image labels,
+             if None, the image's filename needs to be a label.
+    """
+    _, ax = plt.subplots(nrows=4, ncols=4, figsize=(10, 5))
+
+    # Only use 16 random images for presentation.
+    image_sample = os.listdir(image_dir)[:16]
+    if label_path:
+        label_sample = list(pd.read_csv(label_path)['label'])
+    else:
+        label_sample = [image.split('.')[0] for image in image_sample]
+
+    for i, (image, label) in enumerate(zip(image_sample, label_sample)):
+        image = tf.io.read_file(os.path.join(image_dir, image))
+        image = tf.image.decode_image(image)
+
+        ax[i // 4, i % 4].imshow(image)
+        ax[i // 4, i % 4].set_title(label)
+        ax[i // 4, i % 4].axis('off')
+
+    plt.show()

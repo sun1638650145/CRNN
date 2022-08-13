@@ -7,3 +7,4 @@ from CRNN.tools.preprocessing import train_validation_split
 from CRNN.tools.utils import decode_predictions
 from CRNN.tools.utils import get_dataset_summary
 from CRNN.tools.utils import get_image_format
+from CRNN.tools.utils import visualize_dataset
